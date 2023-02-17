@@ -6,6 +6,9 @@
   height: 40vmin;
   pointer-events: none;
 }
+body {
+  background-color: rgba(223, 223, 223, 0.219);
+}
 
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
@@ -35,4 +38,42 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+/* kayıt-düzenleme-silme  buton ortak stil özelliği */
+.btn-add,
+.btn-delete,
+.btn-edit {
+  color: black;
+  transition: all 1.2s;
+  margin: 1px;
+}
+/* Yeni Kayıt ekleme  butonu stil özelliği */
+.btn-add {
+  background-color: rgba(75, 168, 255, 0.658);
+  float: right;
+  margin: 50px;
+}
+.btn-add:hover {
+  background-color: rgba(75, 168, 255, 0.253);
+
+  transition: all 1.2s;
+}
+/* Kaydı Düzenleme butonu stil özelliği */
+
+.btn-edit:hover {
+  color: rgba(81, 184, 77, 0.76);
+
+  transition: all 1.2s;
+}
+/* Kayıt Silme butonu stil özelliği */
+
+.btn-delete:hover {
+  color: rgba(252, 44, 44, 0.658);
+  transition: all 1.2s;
+}
+
+.base-table {
+  box-shadow: 1px 2px #8888883a;
+  margin: 50px;
 }
