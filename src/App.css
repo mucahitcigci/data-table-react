@@ -51,12 +51,12 @@ body {
 /* Yeni Kayıt ekleme  butonu stil özelliği */
 .btn-add {
   background-color: rgba(75, 168, 255, 0.658);
-  float: right;
-  margin: 50px;
+
+  /* margin: 15px; */
+  position: relative;
 }
 .btn-add:hover {
   background-color: rgba(75, 168, 255, 0.253);
-
   transition: all 1.2s;
 }
 /* Kaydı Düzenleme butonu stil özelliği */
@@ -75,5 +75,19 @@ body {
 
 .base-table {
   box-shadow: 1px 2px #8888883a;
-  margin: 50px;
+  margin: 40px;
+}
+
+/*  */
+
+/*  */
+.site-space-compact-wrapper {
+  width: 50%;
+  height: 20px;
+  position: relative;
+  margin: auto;
+}
+/*  */
+.rowCss {
+  margin: 150px;
 }
