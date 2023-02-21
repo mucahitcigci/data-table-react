@@ -15,6 +15,7 @@ import { useContext, useLayoutEffect, useState } from "react";
 import { AppContext } from "../context/Provider";
 const { Option } = Select;
 var now = dayjs();
+
 const FilterComp = () => {
   const [open, setOpen] = useState(false);
   const [remove, setRemove] = useState(false);
@@ -43,19 +44,14 @@ const FilterComp = () => {
 
   const filterList = () => {
     let newArr = [...users];
-    const filter = {
-      name: name,
-      gender: gender,
-      //   outOfUse: outOfUse === "false" ? false : true,
-    };
-    console.log(newArr, filter.outOfUse);
 
-    let nameFilteredList = newArr.filter(function (item) {
-      for (var key in filter) {
-        if (filter[key] && item[key] == filter[key]) return false;
-      }
-      return true;
-    });
+    let nameFilteredList = newArr
+      .filter((item) => (name === "" ? true : item.name === name))
+      .filter((item) => (gender === "" ? true : item.gender === gender))
+      .filter((item) =>
+        outOfUse === "" ? true : item.outOfUse.toString() === outOfUse
+      );
+
     setUsers(nameFilteredList);
     setOpen(false);
   };

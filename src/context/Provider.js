@@ -28,8 +28,8 @@ function Provider(props) {
   const [modal, setModal] = useState({});
   const [image, setImage] = useState("");
   const [name, setName] = useState("");
-  const [outOfUse, setOutOfUse] = useState(false);
-  const [gender, setGender] = useState("Kadın");
+  const [outOfUse, setOutOfUse] = useState("");
+  const [gender, setGender] = useState("");
   const [startDate, setStartDate] = useState([]);
   const [minSalary, setMinSalary] = useState([]);
   const [maxsalary, setMaxSalary] = useState([]);
