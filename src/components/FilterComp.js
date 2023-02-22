@@ -11,13 +11,21 @@ import {
   Space,
 } from "antd";
 import dayjs from "dayjs";
-import { useContext, useLayoutEffect, useState } from "react";
+import {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { AppContext } from "../context/Provider";
+import useStoreData from "../hooks/useStoreData";
 const { Option } = Select;
 var now = dayjs();
 
 const FilterComp = () => {
   const [open, setOpen] = useState(false);
+  const nameRef = useRef();
   const [remove, setRemove] = useState(false);
   const {
     setGender,
@@ -35,6 +43,7 @@ const FilterComp = () => {
     users,
     setUsers,
   } = useContext(AppContext);
+  const { getData } = useStoreData();
   const showDrawer = () => {
     setOpen(true);
   };
@@ -44,19 +53,35 @@ const FilterComp = () => {
 
   const filterList = () => {
     let newArr = [...users];
-
     let nameFilteredList = newArr
-      .filter((item) => (name === "" ? true : item.name === name))
+      .filter((item) =>
+        name === "" ? true : item.name.toLowerCase() === name.toLowerCase()
+      )
       .filter((item) => (gender === "" ? true : item.gender === gender))
       .filter((item) =>
         outOfUse === "" ? true : item.outOfUse.toString() === outOfUse
-      );
+      )
+      .filter((item) => {
+        if (minSalary === "" && maxsalary === "") return true;
+        if (minSalary === "" && maxsalary !== "")
+          return item.salary <= maxsalary;
+        if (minSalary !== "" && maxsalary === "")
+          return item.salary >= minSalary;
+        if (minSalary !== "" && maxsalary !== "")
+          return item.salary >= minSalary && item.salary <= maxsalary;
+      });
 
     setUsers(nameFilteredList);
     setOpen(false);
+    document.getElementById("create-course-form").reset();
   };
 
-  useLayoutEffect(() => {}, []);
+  const removeFilter = () => {
+    document.getElementById("create-course-form").reset();
+    const data = getData("users");
+    setUsers(data);
+    setOpen(false);
+  };
 
   return (
     <>
@@ -73,11 +98,15 @@ const FilterComp = () => {
           paddingBottom: 80,
         }}
       >
-        <Form layout="vertical" hideRequiredMark>
+        <Form layout="vertical" hideRequiredMark id="create-course-form">
           <Row gutter={16}>
             <Col span={12}>
               <Form.Item name="name" label="İsim Soyisim">
-                <Input value={name} onChange={(e) => setName(e.target.value)} />
+                <Input
+                  ref={nameRef}
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
               </Form.Item>
             </Col>
             <Col span={12}>
@@ -152,7 +181,7 @@ const FilterComp = () => {
           </Row>
         </Form>
         <Space style={{ float: "right" }}>
-          <Button onClick={() => setOpen(false)}>İptal</Button>
+          <Button onClick={removeFilter}>filtreleri kaldır</Button>
           <Button onClick={filterList} type="primary">
             Filtrele
           </Button>

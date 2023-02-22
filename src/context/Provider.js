@@ -31,8 +31,8 @@ function Provider(props) {
   const [outOfUse, setOutOfUse] = useState("");
   const [gender, setGender] = useState("");
   const [startDate, setStartDate] = useState([]);
-  const [minSalary, setMinSalary] = useState([]);
-  const [maxsalary, setMaxSalary] = useState([]);
+  const [minSalary, setMinSalary] = useState("");
+  const [maxsalary, setMaxSalary] = useState("");
 
   return (
     <div>

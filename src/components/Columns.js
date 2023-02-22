@@ -1,8 +1,13 @@
-import { DeleteOutlined, EditOutlined } from "@ant-design/icons";
+import {
+  CheckOutlined,
+  CloseOutlined,
+  DeleteOutlined,
+  EditOutlined,
+} from "@ant-design/icons";
 import { useContext } from "react";
 import { AppContext } from "../context/Provider";
 import useStoreData from "../hooks/useStoreData";
-
+import Avatar from "../image/avatar.png";
 const Columns = () => {
   const { users, setUsers, setModal } = useContext(AppContext);
   const { setData } = useStoreData();
@@ -27,10 +32,13 @@ const Columns = () => {
           value: "False",
         },
       ],
-      onFilter: (value, record) => record.outOfUse.startsWith(value),
-      render: (text) => (
-        <a title={{ text }}>{text ? text.toString() : "false"}</a>
-      ),
+      render: (text) =>
+        // <a title={{ text }}>{text ? text.toString() : "false"}</a>
+        text === true ? (
+          <CheckOutlined style={{ fontSize: 25 }} />
+        ) : (
+          <CloseOutlined style={{ fontSize: 25 }} />
+        ),
     },
 
     {
@@ -63,7 +71,13 @@ const Columns = () => {
       title: "Fotoğraf",
       key: "image",
       dataIndex: "image",
-      render: (text) => <img width={50} height={50} src={text} alt="Red dot" />,
+      render: (text) => {
+        return text !== "" ? (
+          <img width={50} height={50} src={text} />
+        ) : (
+          <img width={50} height={50} src={Avatar} />
+        );
+      },
     },
     {
       title: "Düzenle/Sil",
