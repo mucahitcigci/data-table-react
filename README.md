@@ -32,3 +32,5 @@ You may also see any lint errors in the console.
 - Context Api
 - React Hooks
 - React Router (npm i react-router-dom)
+
+Project live demo: [ https://data-table-react-kappa.vercel.app/ ]
