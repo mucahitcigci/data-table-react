@@ -1,6 +1,6 @@
 # Getting Started
 
-For Node Modules > Terminal > New Terminal > `npm install`
+For Node Modules > `npm install`
 
 ## Available Scripts
 
