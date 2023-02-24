@@ -7,14 +7,16 @@ const initialState = {
   setModal: () => {},
   image: "",
   setImage: () => {},
-  name: "",
+  name: [],
   setName: () => {},
   outOfUse: null,
   setOutOfUse: () => {},
   gender: "",
   setGender: () => {},
-  startDate: [],
+  startDate: "",
   setStartDate: () => {},
+  endDate: "",
+  setEndDate: () => {},
   minSalary: "",
   setMinSalary: () => {},
   maxsalary: "",
@@ -27,10 +29,11 @@ function Provider(props) {
   const [users, setUsers] = useState([]);
   const [modal, setModal] = useState({});
   const [image, setImage] = useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState([]);
   const [outOfUse, setOutOfUse] = useState("");
   const [gender, setGender] = useState("");
-  const [startDate, setStartDate] = useState([]);
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
   const [minSalary, setMinSalary] = useState("");
   const [maxsalary, setMaxSalary] = useState("");
 
@@ -38,6 +41,8 @@ function Provider(props) {
     <div>
       <AppContext.Provider
         value={{
+          setEndDate,
+          endDate,
           maxsalary,
           setMaxSalary,
           outOfUse,

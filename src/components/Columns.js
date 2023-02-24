@@ -22,16 +22,6 @@ const Columns = () => {
       title: "Kullanım Dışı",
       key: "outOfUse",
       dataIndex: "outOfUse",
-      filters: [
-        {
-          text: "True",
-          value: "True",
-        },
-        {
-          text: "False",
-          value: "False",
-        },
-      ],
       render: (text) =>
         // <a title={{ text }}>{text ? text.toString() : "false"}</a>
         text === true ? (

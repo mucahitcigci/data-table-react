@@ -1,10 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect } from "react";
 import "antd/dist/reset.css";
 import "../App.css";
-import { Button, Col, Row, Space } from "antd";
+import { Button, Space } from "antd";
 import BaseTable from "../components/BaseTable";
 import AddNewUserModal from "../components/AddNewUserModal";
-import { DeleteOutlined, EditOutlined, PlusOutlined } from "@ant-design/icons";
+import { PlusOutlined } from "@ant-design/icons";
 import { AppContext } from "../context/Provider";
 import useStoreData from "../hooks/useStoreData";
 import Columns from "../components/Columns";

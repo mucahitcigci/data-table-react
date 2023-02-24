@@ -19,14 +19,25 @@ import {
   useState,
 } from "react";
 import { AppContext } from "../context/Provider";
+import {
+  genderFilter,
+  maxSalaryFilter,
+  minSalaryFilter,
+  nameFilter,
+  outOfUseFilter,
+} from "../helpers/globalFunctions";
 import useStoreData from "../hooks/useStoreData";
+import GenderFilterComponent from "./GenderFilterComponent";
+import NameFilterComponent from "./NameFilterComponent";
+import OutOfUseFilter from "./OutOfUseFilter";
+import SalaryFilter from "./SalaryFilter";
+import StartDateFilter from "./StartDateFilter";
 const { Option } = Select;
 var now = dayjs();
 
 const FilterComp = () => {
   const [open, setOpen] = useState(false);
-  const nameRef = useRef();
-  const [remove, setRemove] = useState(false);
+  const [customFilters, setCustomFilters] = useState([]);
   const {
     setGender,
     gender,
@@ -51,36 +62,73 @@ const FilterComp = () => {
     setOpen(false);
   };
 
-  const filterList = () => {
-    let newArr = [...users];
-    let nameFilteredList = newArr
-      .filter((item) =>
-        name === "" ? true : item.name.toLowerCase() === name.toLowerCase()
-      )
-      .filter((item) => (gender === "" ? true : item.gender === gender))
-      .filter((item) =>
-        outOfUse === "" ? true : item.outOfUse.toString() === outOfUse
-      )
-      .filter((item) => {
-        if (minSalary === "" && maxsalary === "") return true;
-        if (minSalary === "" && maxsalary !== "")
-          return item.salary <= maxsalary;
-        if (minSalary !== "" && maxsalary === "")
-          return item.salary >= minSalary;
-        if (minSalary !== "" && maxsalary !== "")
-          return item.salary >= minSalary && item.salary <= maxsalary;
-      });
+  const selectComponent = [
+    {
+      value: "Name",
+      component: <NameFilterComponent />,
+      id: 1,
+    },
+    { value: "Gender", component: <GenderFilterComponent /> },
+    // {
+    //   value: "StartDate",
+    //   component: <StartDateFilter value={"StartDate"} />,
+    //   id: 2,
+    // },
+    // {
+    //   value: "EndDate",
+    //   component: <StartDateFilter value={"EndDate"} />,
+    //   id: 3,
+    // },
+    { value: "OutOfUse", component: <OutOfUseFilter />, id: 4 },
+    {
+      value: "MinSalary",
+      component: <SalaryFilter value={"MinSalary"} />,
+      id: 5,
+    },
+    {
+      value: "MaxSalary",
+      component: <SalaryFilter value={"MaxSalary"} />,
+      id: 6,
+    },
+  ];
 
-    setUsers(nameFilteredList);
-    setOpen(false);
-    document.getElementById("create-course-form").reset();
+  const filterFunc = {
+    Name: nameFilter,
+    Gender: genderFilter,
+    MinSalary: minSalaryFilter,
+    MaxSalary: maxSalaryFilter,
+    OutOfUse: outOfUseFilter,
+  };
+
+  const filterValue = {
+    Name: name,
+    Gender: gender,
+    MinSalary: minSalary,
+    MaxSalary: maxsalary,
+    OutOfUse: outOfUse,
+  };
+
+  const filterList = () => {
+    let filteredList = [...users];
+    for (let i = 0; i < customFilters.length; i++) {
+      const element = customFilters[i].value;
+      let newArr = filterFunc[element](filteredList, filterValue[element]);
+      filteredList = newArr;
+    }
+    setUsers(filteredList);
   };
 
   const removeFilter = () => {
-    document.getElementById("create-course-form").reset();
+    setCustomFilters([]);
     const data = getData("users");
     setUsers(data);
     setOpen(false);
+  };
+
+  const addComponent = (e) => {
+    let newFilters = [...customFilters];
+    newFilters.push(selectComponent.filter((item) => item.value === e)[0]);
+    setCustomFilters(newFilters);
   };
 
   return (
@@ -88,7 +136,6 @@ const FilterComp = () => {
       <Button className="btn-add" onClick={showDrawer} icon={<PlusOutlined />}>
         Filtre Ekle
       </Button>
-
       <Drawer
         title="Yeni Bir Filtre Oluşturun"
         width={720}
@@ -98,89 +145,19 @@ const FilterComp = () => {
           paddingBottom: 80,
         }}
       >
-        <Form layout="vertical" hideRequiredMark id="create-course-form">
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="name" label="İsim Soyisim">
-                <Input
-                  ref={nameRef}
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name="outOfUse" label="Kullanım Dışı">
-                <Select value={outOfUse} onChange={(e) => setOutOfUse(e)}>
-                  <Option value="true">True</Option>
-                  <Option value="false">False</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="gender" label="Cinsiyet">
-                <Select value={gender} onChange={(e) => setGender(e)}>
-                  <Option value="Erkek">Erkek</Option>
-                  <Option value="Kadın">Kadın</Option>
-                </Select>
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item name="startDate" label="İşe Başlama Tarihi">
-                <DatePicker.RangePicker
-                  format={"YYYY/MM/DD"}
-                  onChange={(e) => setStartDate(e)}
-                  style={{
-                    width: "100%",
-                  }}
-                  getPopupContainer={(trigger) => trigger.parentElement}
-                />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Row gutter={16}>
-            <Col span={12}>
-              <Form.Item name="salary" label="Maaş">
-                <Input.Group compact>
-                  <Input
-                    style={{
-                      width: 100,
-                      textAlign: "center",
-                    }}
-                    placeholder="Minimum"
-                    onChange={(e) => setMinSalary(e.target.value)}
-                    value={minSalary}
-                  />
-                  <Input
-                    className="site-input-split"
-                    style={{
-                      width: 30,
-                      borderLeft: 0,
-                      borderRight: 0,
-                      pointerEvents: "none",
-                    }}
-                    placeholder="~"
-                    disabled
-                  />
-                  <Input
-                    className="site-input-right"
-                    style={{
-                      width: 100,
-                      textAlign: "center",
-                    }}
-                    placeholder="Maximum"
-                    onChange={(e) => setMaxSalary(e.target.value)}
-                    value={maxsalary}
-                  />
-                </Input.Group>
-              </Form.Item>
-            </Col>
-            <Col span={12}>{/*  */}</Col>
-          </Row>
-        </Form>
-        <Space style={{ float: "right" }}>
+        {customFilters.map((item) => (
+          <>{item.component}</>
+        ))}
+        <Space>
+          <Select onChange={addComponent} style={{ width: 120 }}>
+            {Array(5)
+              .fill(0)
+              .map((_, i) => (
+                <Select.Option value={selectComponent[i].value}>
+                  {selectComponent[i].value}
+                </Select.Option>
+              ))}
+          </Select>
           <Button onClick={removeFilter}>filtreleri kaldır</Button>
           <Button onClick={filterList} type="primary">
             Filtrele

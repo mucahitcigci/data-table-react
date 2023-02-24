@@ -12,7 +12,6 @@ export default function AddNewUserModal({ visible, title }) {
   const { setData } = useStoreData();
 
   const handleOk = () => {
-    console.log(user.outOfUse === true);
     let updatedArr =
       title === "Düzenle"
         ? updateUser([...users], modal, { ...user, image })
